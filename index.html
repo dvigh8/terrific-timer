@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Terrific Timer</title>
+  <link type="text/css" rel="stylesheet" href="main.css" />
+  <link type="text/css" rel="stylesheet" href="timer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="main-container">
+    <div class="row" style='text-align:center'>
+      <div class="column2 roundset" style="float:left">
+        <div class="row">
+          <div class="column3" style="text-align:right;">
+
+            <div class="item_height"> Rounds per set:</div>
+            <div class="item_height"> Number of sets:</div>
+            <div class="item_height"> Rest after:</div>
+
+          </div>
+          <div class="column3" style="text-align:left">
+
+            <div class="item_height"> <input value='1' min='1' max="1000" type='number' id='num_rounds' /></div>
+            <div class="item_height"> <input value='1' min='1' max="1000" type='number' id='num_sets' /></div>
+            <div class="item_heiht"><input id="rest_after" type="checkbox"></div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="column2 time">
+        <div class="row">
+          <div class="column3" style="text-align:right;">
+
+            <div class="item_height">Time active: </div>
+            <div class="item_height">Time rest: </div>
+            <div class="item_height">Rest between sets: </div>
+
+          </div>
+          <div class="column3" style="text-align:left">
+
+            <div class="item_height"><input style='height:2em' value='0' min='0' max=60 type='number' id='time_active_m' /> <input value='5' min='0' max='60' type='number' id='time_active_s' />mm:ss</div>
+            <div class="item_height"><input value='0' min='0' max=60 type='number' id='time_rest_m' /> <input value='0' min='0' max='60' type='number' id='time_rest_s' />mm:ss</div>
+            <div class="item_height"><input value='0' min='0' max='60' type='number' id='set_rest_m' /> <input value='0' min='0' max='60' type='number' id='set_rest_s' />mm:ss</div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="column3" style="text-align:right;">
+
+        <div class="item_height">Round:</div>
+        <div class="item_height">Set:</div>
+        <div class="item_height">Time:</div>
+        <div class="item_height">Total Time:</div>
+
+      </div>
+      <div class="column3" style="text-align:left">
+
+        <div class="item_height" id='round' style="">0</div>
+        <div class="item_height" id='set'>0</div>
+        <div class="item_height" id='time'>00:00</div>
+        <div class="item_height" id='t_time'>00:00</div>
+
+      </div>
+    </div>
+    <div style='text-align:center'>
+
+      <button onclick="start_timer()">Start</button>
+      <button onclick="clear_timer()">Clear</button>
+
+    </div>
+
+    <br>
+
+    <div style='text-align:center'>
+      <button onclick="presets('tabata')">Tabata</button>
+      <button onclick="presets('t')">Test</button>
+      <button onclick="presets('pizza')">Pizza</button>
+    </div>
+
+  </div>
+  <script src="timer.js"></script>
+
+</body>
+
+</html>
