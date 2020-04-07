@@ -6,61 +6,80 @@ var t_timerVar;
 var sound;
 var state = [[5]]
 var colors = ['blue']
-
+var paused = false
 
 function start_timer() {
-  clearInterval(timerVar)
-  clearInterval(t_timerVar)
+  if (paused){
+    paused = !paused
+    
+    t_timerVar = setInterval(function() {
+      count_down('t_time', t_time)
+    }, 1000)
 
-  place = 0;
-  t_time = [0]
-  state = [[5]]
-  colors = ['blue']
-  rar = $('#rest_after').prop('checked');
-  sound = new Audio('beep.wav')
-
-  vals = {
-    'rounds': parseInt($('#num_rounds').val()), // 0
-    'sets': parseInt($('#num_sets').val()), // 1
-    'time_active': parseInt($('#time_active_m').val()) * 60 + parseInt($('#time_active_s').val()), // 2
-    'time_rest': parseInt($('#time_rest_m').val()) * 60 + parseInt($('#time_rest_s').val()), // 3
-    'set_rest': parseInt($('#set_rest_m').val()) * 60 + parseInt($('#set_rest_s').val()) // 4
+    time = [state[place]]
+    timerVar = setInterval(function() {
+      count_down('time', time)
+    }, 1000)
   }
+  else{
 
-  for(i = 1; i <= vals['sets']; i++){
-    for(j = 1; j <= vals['rounds']; j++){
-
-      if(vals['time_active'] != 0){
-        state.push([vals['time_active']]);
-        colors.push('red');
+    clearInterval(timerVar)
+    clearInterval(t_timerVar)
+    
+    place = 0;
+    t_time = [0]
+    state = [[5]]
+    colors = ['blue']
+    rar = $('#rest_after').prop('checked');
+    sound = new Audio('beep.wav')
+    
+    vals = {
+      'rounds': parseInt($('#num_rounds').val()), // 0
+      'sets': parseInt($('#num_sets').val()), // 1
+      'time_active': parseInt($('#time_active_m').val()) * 60 + parseInt($('#time_active_s').val()), // 2
+      'time_rest': parseInt($('#time_rest_m').val()) * 60 + parseInt($('#time_rest_s').val()), // 3
+      'set_rest': parseInt($('#set_rest_m').val()) * 60 + parseInt($('#set_rest_s').val()) // 4
+    }
+    
+    for(i = 1; i <= vals['sets']; i++){
+      for(j = 1; j <= vals['rounds']; j++){
+        
+        if (vals['time_active'] != 0) {
+          state.push([vals['time_active']]);
+          colors.push('red');
+        }
+        
+        if (j < vals['rounds'] && vals['time_rest'] != 0) {
+          state.push([vals['time_rest']]);
+          colors.push('green');
+        } else if(j == vals['rounds'] && rar && vals['time_rest'] != 0){
+          state.push([vals['time_rest']]);
+          colors.push('green');
+        }
       }
-
-      if(j < vals['rounds'] && vals['time_rest'] != 0){
-        state.push([vals['time_rest']]);
-        colors.push('green');
-      }else if(j == vals['rounds'] && rar && vals['time_rest'] != 0){
-        state.push([vals['time_rest']]);
-        colors.push('green');
+      if(i < vals['sets'] && vals['set_rest'] != 0) {
+        state.push([vals['set_rest']]);
+        colors.push('blue');
+      } else if(i == vals['sets'] && rar && vals['set_rest'] != 0) {
+        state.push([vals['set_rest']]);
+        colors.push('blue');
       }
     }
-    if(i < vals['sets'] && vals['set_rest'] != 0){
-      state.push([vals['set_rest']]);
-      colors.push('blue');
-    }else if(i == vals['sets'] && rar && vals['set_rest'] != 0){
-      state.push([vals['set_rest']]);
-      colors.push('blue');
-    }
+    console.log(t_time)
+    console.log(state)
+    console.log(colors)
+    
+    state.forEach(function(element){
+      t_time[0] += element[0];
+    })
+    console.log(t_time)
+    next_operation();
   }
-  state.forEach(function(element){
-    t_time[0] += element[0];
-  })
-
-  next_operation();
 }
-
+  
 function next_operation(){
   color = ''
-  if(place < state.length){
+  if (place < state.length) {
     t_timerVar = setInterval(function() {
       count_down('t_time', t_time)
     }, 1000)
@@ -71,7 +90,7 @@ function next_operation(){
     }, 1000)
     color = colors[place]
     place++;
-  }else{
+  } else {
     color = 'black'
   }
   setTimeout(function() {
@@ -81,7 +100,7 @@ function next_operation(){
 }
 
 function update_ui(color) {
-
+  console.log(state)
   $('#round').html(state['round']);
   $('#set').html(state['set']);
   $('#time').css('color', color)
@@ -93,9 +112,27 @@ function update_ui(color) {
     clearInterval(timerVar)
     clearInterval(t_timerVar)
   }
-  if(place != 1){
+  if (place != 1){
     sound.play();
   }
+}
+
+function pause_timer(){
+  paused = !paused
+  clearInterval(timerVar)
+  clearInterval(t_timerVar)
+}
+
+function clear_timer(){
+  $('#round').html(0);
+  $('#set').html(0);
+  $('#time').css('color', "black")
+
+  $('#time').html('00:00')
+  $('#t_time').html('00:00')
+
+  clearInterval(timerVar)
+  clearInterval(t_timerVar)
 }
 
 function count_down(obj, t) {
@@ -139,7 +176,7 @@ function presets(t) {
     $('#set_rest_s').val(10);
     $( "#rest_after" ).prop( "checked", false);
 
-  }else if(t == 'pizza'){
+  } else if(t == 'pizza'){
     $('#num_rounds').val(1);
     $('#time_active_m').val(0);
     $('#time_active_s').val(0);
