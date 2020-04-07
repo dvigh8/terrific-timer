@@ -11,12 +11,11 @@ var paused = false
 function start_timer() {
   if (paused){
     paused = !paused
-    
+
     t_timerVar = setInterval(function() {
       count_down('t_time', t_time)
     }, 1000)
 
-    time = [state[place]]
     timerVar = setInterval(function() {
       count_down('time', time)
     }, 1000)
